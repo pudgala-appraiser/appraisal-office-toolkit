@@ -1,0 +1,15 @@
+{
+  "name": "감정관실 실무 도구",
+  "short_name": "실무 도구",
+  "description": "문화유산감정관실 현장 실무 도구 모음 — 판별·대조·안내·절차",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FAF7F0",
+  "theme_color": "#1F4E79",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
