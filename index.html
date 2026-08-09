@@ -61,6 +61,14 @@ header .sub{color:var(--ondarksub);font-size:14px;margin:0 0 14px}
 .seal.on{background:var(--accent);border-color:var(--accent)}
 .seal.on .ch{color:var(--ondark)}
 .seal.on .nm{color:var(--ondarksub)}
+/* 인장별 강조색 — 하단 색동바 순서(청·적·황·먹)와 대응 */
+.seal:nth-child(2).on{background:var(--warn);border-color:var(--warn)}
+.seal:nth-child(2).on .nm{color:#E8CFCC}
+.seal:nth-child(3).on{background:var(--flag);border-color:var(--flag)}
+.seal:nth-child(3).on .ch{color:var(--ink)}
+.seal:nth-child(3).on .nm{color:#6B5320}
+.seal:nth-child(4).on{background:var(--ink);border-color:var(--ink)}
+.seal:nth-child(4).on .nm{color:#A9A296}
 .seal:hover{border-color:var(--accent)}
 .seals-cap{text-align:center;color:var(--faint);font-size:12.5px;margin:0 0 30px}
 
@@ -80,6 +88,17 @@ header .sub{color:var(--ondarksub);font-size:14px;margin:0 0 14px}
 .card .ch-mini{margin-left:auto;font-family:'Nanum Myeongjo',Batang,serif;font-weight:800;
   font-size:20px;color:var(--faint)}
 .card p{margin:0 0 12px;font-size:14.5px;line-height:1.7}
+/* 카드 좌측 띠 — 인장·색동바와 대응 */
+#c1{border-left-color:var(--warn)}
+#c2{border-left-color:var(--flag)}
+#c3{border-left-color:var(--ink)}
+#c1 .num{background:var(--warn)}
+#c2 .num{background:var(--flag);color:var(--ink)}
+#c3 .num{background:var(--ink)}
+#c1 a.open{color:var(--warn);border-color:var(--warn)}
+#c1 a.open:hover{color:#8C322A;border-color:#8C322A}
+#c3 a.open{color:var(--ink);border-color:var(--ink)}
+#c3 a.open:hover{color:#000;border-color:#000}
 .card .basis{color:var(--faint);font-size:12px;margin:auto 0 14px;line-height:1.6}
 .card a.open{align-self:flex-start;display:inline-block;text-decoration:none;
   background:transparent;color:var(--accent);border:1px solid var(--accent);
