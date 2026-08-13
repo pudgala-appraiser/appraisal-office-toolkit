@@ -4,32 +4,308 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#1F4E79">
-<title>문화유산 감정 — 이동 중</title>
+<title>감정관실 실무 도구</title>
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="apple-mobile-web-app-title" content="실무 도구">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#FAF7F0;color:#3D3831;
-  font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
-  display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px}
-.box{max-width:420px}
-.saekdong{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
+:root{
+  --bg:#FAF7F0; --ink:#221E1A; --body:#3D3831; --sub:#6F675B; --faint:#948B7D;
+  --line:#E3DBC9; --box:#F3EEE3; --boxdeep:#ECE5D6;
+  --accent:#1F4E79; --accent2:#1A4066; --warn:#A63C32; --flag:#D9A43B; --ok:#3F6B51;
+  --ondark:#FAF7F0; --ondarksub:#B9C9D8;
+  /* 본문·UI: 웹폰트 없이 각 기기 기본 한글 고딕 사용 */
+  --sans:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Segoe UI',Roboto,
+    'Malgun Gothic','맑은 고딕','Noto Sans KR','Nanum Gothic',sans-serif;
+  /* 제목·인장: 명조 유지. 한글은 나눔명조, 한자는 노토 명조로 글자 단위 대체 */
+  --serif:'Nanum Myeongjo','Noto Serif KR',AppleMyungjo,'Apple Myungjo',
+    'Source Han Serif K',Batang,'바탕',serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);
+  font-family:var(--sans);
+  font-size:15.5px;line-height:1.65}
+.serif{font-family:var(--serif)}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+
+/* 색동 */
+.saekdong{display:flex;gap:8px}
 .saekdong i{display:block;width:34px;height:5px}
-.saekdong i:nth-child(1){background:#1F4E79}.saekdong i:nth-child(2){background:#A63C32}
-.saekdong i:nth-child(3){background:#D9A43B}.saekdong i:nth-child(4){background:#221E1A}
-p{font-size:15px;line-height:1.7;margin:0 0 14px}
-a{color:#1F4E79;font-weight:700}
-.fine{color:#948B7D;font-size:12.5px}
+.saekdong i:nth-child(1){background:var(--accent)}
+.saekdong i:nth-child(2){background:var(--warn)}
+.saekdong i:nth-child(3){background:var(--flag)}
+.saekdong i:nth-child(4){background:var(--ink)}
+.saekdong.ondark i:nth-child(1){background:var(--warn)}
+.saekdong.ondark i:nth-child(2){background:var(--flag)}
+.saekdong.ondark i:nth-child(3){background:var(--ondark)}
+.saekdong.ondark i:nth-child(4){background:var(--ink)}
+
+/* 헤더 */
+header{background:var(--accent);color:var(--ondark);padding:26px 0 22px;position:relative;overflow:hidden}
+header .wrap{position:relative;z-index:1}
+/* 안진응안(雁陣鷹眼) 문양 — 쪽빛 위 회청 톤, 본문 뒤에 낮은 명도차로 배치 */
+header .mark{position:absolute;right:-10px;bottom:4px;
+  display:flex;gap:.04em;font-family:var(--serif);font-weight:400;line-height:1;
+  font-size:clamp(52px,13.5vw,98px);color:var(--ondarksub);opacity:.19;
+  pointer-events:none;user-select:none;z-index:0;white-space:nowrap}
+header .mark span{display:block;opacity:0;transform-origin:50% 80%;
+  transform:translate(var(--dx),34px) scale(.55) rotate(var(--rot));
+  animation:markIn 2.2s cubic-bezier(.25,.6,.3,1) forwards}
+header .mark span:nth-child(1){--dx:-24px;--rot:-8deg;animation-delay:.10s}
+header .mark span:nth-child(2){--dx:-15px;--rot:-4deg;animation-delay:.34s}
+header .mark span:nth-child(3){--dx:-20px;--rot:-7deg;animation-delay:.58s}
+header .mark span:nth-child(4){--dx:-11px;--rot:-3deg;animation-delay:.82s}
+@keyframes markIn{
+  0%{opacity:0;transform:translate(var(--dx),34px) scale(.55) rotate(var(--rot))}
+  40%{opacity:1}
+  58%{transform:translate(0,-4px) scale(1.07) rotate(0deg)}
+  74%{transform:translate(0,-4px) scale(1.07) rotate(0deg)}
+  100%{opacity:1;transform:translate(0,0) scale(1) rotate(0deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  header .mark span{animation:none;transform:none;opacity:1}
+}
+@media(max-width:640px){
+  header .mark{opacity:.15}
+}
+header .eyebrow{color:var(--ondarksub);font-size:clamp(9px,2.6vw,12px);font-weight:700;
+  letter-spacing:clamp(0.5px,0.6vw,3px);margin-bottom:8px;white-space:nowrap}
+header h1{font-family:var(--serif);font-weight:800;
+  font-size:clamp(25px,5vw,32px);margin:0 0 6px;line-height:1.3;color:var(--ondark);word-break:keep-all}
+header .sub{color:var(--ondarksub);font-size:14px;margin:0 0 14px}
+
+/* 인장 행 (동세) */
+.seals{display:grid;grid-template-columns:repeat(4,76px);gap:14px;justify-content:center;margin:34px 0 8px}
+.seal{padding:12px 0 10px;text-align:center;background:var(--box);
+  border:1px solid var(--line);cursor:pointer;
+  transition:background-color .45s ease,border-color .45s ease}
+@media(max-width:480px){
+  .seals{grid-template-columns:repeat(4,minmax(0,76px));gap:9px}
+  .seal .ch{font-size:28px}
+  .seal .nm{font-size:11px}
+}
+@media(max-width:320px){
+  .seals{grid-template-columns:repeat(2,minmax(0,120px));gap:10px}
+}
+.seal .ch{display:block;font-family:var(--serif);
+  font-weight:500;font-size:34px;line-height:1;color:var(--ink);
+  transition:color .45s ease}
+.seal .nm{display:block;font-size:11.5px;font-weight:700;color:var(--sub);margin-top:7px;letter-spacing:1px}
+.seal.on{background:var(--accent);border-color:var(--accent)}
+.seal.on .ch{color:var(--ondark)}
+.seal.on .nm{color:var(--ondarksub)}
+/* 인장별 강조색 — 하단 색동바 순서(청·적·황·먹)와 대응 */
+.seal:nth-child(2).on{background:var(--warn);border-color:var(--warn)}
+.seal:nth-child(2).on .nm{color:#E8CFCC}
+.seal:nth-child(3).on{background:var(--flag);border-color:var(--flag)}
+.seal:nth-child(3).on .ch{color:var(--ink)}
+.seal:nth-child(3).on .nm{color:#6B5320}
+.seal:nth-child(4).on{background:var(--ink);border-color:var(--ink)}
+.seal:nth-child(4).on .nm{color:#A9A296}
+.seal:hover{border-color:var(--accent)}
+.seals-cap{text-align:center;color:var(--faint);font-size:12.5px;margin:0 0 30px}
+
+/* 카드 */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:34px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.card{background:var(--box);border:1px solid var(--line);border-left:4px solid var(--accent);
+  padding:22px 22px 20px;display:flex;flex-direction:column;
+  transition:background-color .45s ease}
+.card.on{background:var(--boxdeep)}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--ondark);
+  font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.card h2{font-family:var(--serif);font-weight:800;
+  font-size:18.5px;color:var(--ink);margin:0;line-height:1.35}
+.card.on h2{text-decoration:underline;text-underline-offset:4px}
+.card .ch-mini{margin-left:auto;font-family:var(--serif);font-weight:500;
+  font-size:20px;color:var(--faint)}
+.card p{margin:0 0 12px;font-size:14.5px;line-height:1.7}
+/* 카드 좌측 띠 — 인장·색동바와 대응 */
+#c1{border-left-color:var(--warn)}
+#c2{border-left-color:var(--flag)}
+#c3{border-left-color:var(--ink)}
+#c1 .num{background:var(--warn)}
+#c2 .num{background:var(--flag);color:var(--ink)}
+#c3 .num{background:var(--ink)}
+#c1 a.open{color:var(--warn);border-color:var(--warn)}
+#c1 a.open:hover{color:#8C322A;border-color:#8C322A}
+#c3 a.open{color:var(--ink);border-color:var(--ink)}
+#c3 a.open:hover{color:#000;border-color:#000}
+.card .basis{color:var(--faint);font-size:12px;margin:auto 0 14px;line-height:1.6}
+.card a.open{align-self:flex-start;display:inline-block;text-decoration:none;
+  background:transparent;color:var(--accent);border:1px solid var(--accent);
+  font-size:13.5px;font-weight:700;letter-spacing:1px;padding:9px 20px}
+.card a.open:hover{color:var(--accent2);border-color:var(--accent2);text-decoration:underline}
+.card a.open.pending{color:var(--faint);border-color:var(--line);pointer-events:none}
+a:focus-visible,.seal:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* 소개문 */
+.intro-note{border:1px solid var(--line);border-left:4px solid var(--accent);
+  background:var(--box);padding:18px 20px;margin:0 0 30px;font-size:14.5px}
+.intro-note b{color:var(--ink)}
+
+/* 푸터 */
+footer{padding:8px 0 36px}
+footer .fine{color:var(--faint);font-size:12px;line-height:1.7;margin:0 0 6px}
+footer .saekdong{margin:0 0 14px}
 </style>
-<script>
-/* 감정앱 게시 주소 — 재게시로 주소가 바뀌면 이 한 줄만 수정 */
-var APP_URL = "https://claude.ai/public/artifacts/d0b55682-6a25-4c05-a08f-a817ba67035e";
-location.replace(APP_URL);
-</script>
 </head>
 <body>
-<div class="box">
-  <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-  <p>문화유산 감정 도구로 이동하고 있습니다.</p>
-  <p><a id="fallback" href="https://claude.ai/public/artifacts/d0b55682-6a25-4c05-a08f-a817ba67035e">자동으로 열리지 않으면 여기를 눌러 주십시오.</a></p>
-  <p class="fine">사진 등록이 되지 않을 때는 이 페이지 주소를 브라우저(Chrome·Safari)에서 열어 주십시오.</p>
-</div>
+
+<header>
+  <div class="mark" aria-hidden="true"><span>雁</span><span>陣</span><span>鷹</span><span>眼</span></div>
+  <div class="wrap">
+    <div class="eyebrow">KOREA HERITAGE SERVICE · 문화유산감정관실</div>
+    <h1>감정관실 실무 도구</h1>
+    <p class="sub">감정 현장의 네 가지 도구 — 판별 · 대조 · 안내 · 절차</p>
+    <div class="saekdong ondark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="seals" id="seals" aria-label="도구 바로가기">
+    <button class="seal" data-i="0"><span class="ch">審</span><span class="nm">감정</span></button>
+    <button class="seal" data-i="1"><span class="ch">査</span><span class="nm">대조</span></button>
+    <button class="seal" data-i="2"><span class="ch">鑑</span><span class="nm">안내</span></button>
+    <button class="seal" data-i="3"><span class="ch">規</span><span class="nm">절차</span></button>
+  </div>
+  <p class="seals-cap">인장을 누르면 해당 도구로 이동합니다</p>
+
+  <div class="intro-note">
+    <b>비문화유산 확인 제도</b>를 중심으로 한 감정 현장의 실무를 하나의 흐름으로 묶었습니다.
+    접수된 동산을 <b>판별</b>하고 처리 경로를 정하며(審), 도난 국가유산 목록과 <b>대조</b>하고(査),
+    외국인 신청인에게 절차를 <b>안내</b>하며(鑑), 검색대 적발 시의 <b>조치 절차</b>를 따릅니다(規).
+    네 도구 모두 감정위원의 판단을 보조하며, 최종 판단은 감정위원이 합니다.
+  </div>
+
+  <div class="grid" id="cards">
+
+    <article class="card" id="c0">
+      <div class="card-head">
+        <span class="num" aria-hidden="true">1</span>
+        <h2>문화유산 감정</h2>
+        <span class="ch-mini" aria-hidden="true">審</span>
+      </div>
+      <p>유물 사진과 증빙(영수증·라벨·서명 등)으로 일반동산문화유산 해당 여부를 판별하고,
+      실물 감정·사전예약감정 등 처리 경로까지 권고하는 AI 화상 감정 보조 도구입니다.</p>
+      <div class="basis">문화유산법 제60조 · 시행령 제36조 [별표 3] · 감정지침 v2.2<br>휴대폰에서 사진 등록이 되지 않으면 링크를 브라우저(Chrome·Safari)로 열어 사용하십시오.</div>
+      <a class="open" data-key="appraisal" href="#">열기</a>
+    </article>
+
+    <article class="card" id="c1">
+      <div class="card-head">
+        <span class="num" aria-hidden="true">2</span>
+        <h2>도난국가유산 검색기</h2>
+        <span class="ch-mini" aria-hidden="true">査</span>
+      </div>
+      <p>취득·반출 물품을 국가유산청 공개 도난 목록 512건과 명칭·전문·이미지로 대조해
+      검토 후보를 제시하는 1차 검색기입니다. 환지본처(還至本處) — 제자리로 돌아가기까지.</p>
+      <div class="basis">국가유산청 『도난국가유산 정보』(2025) + 누리집 갱신분</div>
+      <a class="open" data-key="screener" href="#">열기</a>
+    </article>
+
+    <article class="card" id="c2">
+      <div class="card-head">
+        <span class="num" aria-hidden="true">3</span>
+        <h2>감정 현장 다국어 안내</h2>
+        <span class="ch-mini" aria-hidden="true">鑑</span>
+      </div>
+      <p>감정 절차와 확인 제도를 8개 언어 문안과 음성(TTS)으로 외국인 신청인에게
+      현장에서 바로 안내합니다.</p>
+      <div class="basis">문화유산법 제60조·제90조 · 형사소송법 관련 조항</div>
+      <a class="open" data-key="guide" href="#">열기</a>
+    </article>
+
+    <article class="card" id="c3">
+      <div class="card-head">
+        <span class="num" aria-hidden="true">4</span>
+        <h2>검색대 적발 시 절차</h2>
+        <span class="ch-mini" aria-hidden="true">規</span>
+      </div>
+      <p>검색 과정에서 미신청 동산이 발견되었을 때의 감정·조치 절차를
+      단계별 문답으로 안내하는 현장 매뉴얼입니다.</p>
+      <div class="basis">문화유산법 제39·60·90조 · 형사소송법 제211·212조 · 감정관실 설치·운영 규정</div>
+      <a class="open" data-key="procedure" href="#">열기</a>
+    </article>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v2.6 (2026-08-09)</p>
+  </div>
+</footer>
+
+<script>
+/* 감정앱은 앱 가로채기 우회를 위해 중계 페이지를 거친다 (게시 주소는 open-appraisal.html에서 관리) */
+var LINKS = {
+  appraisal: "https://pudgala-appraiser.github.io/appraisal-office-toolkit/open-appraisal.html",
+  screener:  "https://pudgala-appraiser.github.io/stolen-heritage-screener/",
+  guide:     "https://pudgala-appraiser.github.io/heritage-guide/",
+  procedure: "https://pudgala-appraiser.github.io/appraisal-procedure-guide/"
+};
+
+(function () {
+  'use strict';
+
+  /* 링크 주입 */
+  var anchors = document.querySelectorAll('a.open');
+  Array.prototype.forEach.call(anchors, function (a) {
+    var url = LINKS[a.getAttribute('data-key')] || '';
+    if (/^https?:\/\//.test(url)) {
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+    } else {
+      a.textContent = '링크 등록 예정';
+      a.classList.add('pending');
+      a.removeAttribute('href');
+    }
+  });
+
+  /* 순환 강조 (절제된 동세) — 축소 동작 선호 시 자동 순환 없음 */
+  var seals = document.querySelectorAll('.seal');
+  var cards = document.querySelectorAll('.card');
+  var idx = 0, timer = null;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setActive(i) {
+    Array.prototype.forEach.call(seals, function (s, k) { s.classList.toggle('on', k === i); });
+    Array.prototype.forEach.call(cards, function (c, k) { c.classList.toggle('on', k === i); });
+    idx = i;
+  }
+  function cycle() { setActive((idx + 1) % 4); }
+  function startTimer() {
+    if (reduced || timer) return;
+    timer = setInterval(cycle, 3500);
+  }
+  function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+  Array.prototype.forEach.call(seals, function (s, k) {
+    s.addEventListener('click', function () {
+      stopTimer();
+      setActive(k);
+      cards[k].scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+    });
+    s.addEventListener('mouseenter', function () { stopTimer(); setActive(k); });
+    s.addEventListener('mouseleave', startTimer);
+  });
+  Array.prototype.forEach.call(cards, function (c, k) {
+    c.addEventListener('mouseenter', function () { stopTimer(); setActive(k); });
+    c.addEventListener('mouseleave', startTimer);
+  });
+
+  setActive(0);
+  startTimer();
+})();
+</script>
 </body>
 </html>
