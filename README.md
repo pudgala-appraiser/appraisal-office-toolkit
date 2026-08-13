@@ -12,7 +12,7 @@
 
 | | 도구 | 역할 |
 |---|---|---|
-| 審 | [문화유산 감정](https://claude.ai/public/artifacts/402488d3-4adc-4e8f-ad02-2d7349ca6121) | 유물 사진과 증빙으로 일반동산문화유산 해당 여부를 판별하고 처리 경로를 권고 |
+| 審 | [문화유산 감정](https://claude.ai/public/artifacts/d0b55682-6a25-4c05-a08f-a817ba67035e) | 유물 사진과 증빙으로 일반동산문화유산 해당 여부를 판별하고 처리 경로를 권고 |
 | 査 | [도난국가유산 검색기](https://pudgala-appraiser.github.io/stolen-heritage-screener/) | 공개 도난 목록과 명칭·전문·이미지로 대조하여 검토 후보를 제시 |
 | 鑑 | [감정 현장 다국어 안내](https://pudgala-appraiser.github.io/heritage-guide/) | 감정 절차와 확인 제도를 8개 언어 문안과 음성으로 안내 |
 | 規 | [검색대 적발 시 절차](https://pudgala-appraiser.github.io/appraisal-procedure-guide/) | 미신청 동산 발견 시의 감정·조치 절차를 단계별 문답으로 안내 |
