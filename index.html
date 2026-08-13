@@ -52,18 +52,38 @@ header .mark{position:absolute;right:-10px;bottom:4px;
   display:flex;gap:.04em;font-family:var(--serif);font-weight:400;line-height:1;
   font-size:clamp(52px,13.5vw,98px);color:var(--ondarksub);opacity:.19;
   pointer-events:none;user-select:none;z-index:0;white-space:nowrap}
+/* 그림 1·2자 雁陣 — 기러기: 낮게 활공해 들어와 떠올랐다 내려앉는다 */
 header .mark span{display:block;opacity:0;transform-origin:50% 80%;
   transform:translate(var(--dx),34px) scale(.55) rotate(var(--rot));
-  animation:markIn 2.2s cubic-bezier(.25,.6,.3,1) forwards}
+  animation:gooseIn 2.2s cubic-bezier(.25,.6,.3,1) forwards}
 header .mark span:nth-child(1){--dx:-24px;--rot:-8deg;animation-delay:.10s}
 header .mark span:nth-child(2){--dx:-15px;--rot:-4deg;animation-delay:.34s}
-header .mark span:nth-child(3){--dx:-20px;--rot:-7deg;animation-delay:.58s}
-header .mark span:nth-child(4){--dx:-11px;--rot:-3deg;animation-delay:.82s}
-@keyframes markIn{
+/* 그림 3·4자 鷹眼 — 매: 멀리서 작게 선회하다 기수를 꺾어 급강하, 제동하며 꽂힌다 */
+header .mark span:nth-child(3),
+header .mark span:nth-child(4){
+  transform:translate(var(--cx1),-92px) scale(.45) rotate(-4deg);
+  animation:hawkIn 2.3s linear forwards}
+header .mark span:nth-child(3){--cx1:52px;--cx2:-34px;animation-delay:1.5s}
+header .mark span:nth-child(4){--cx1:40px;--cx2:-22px;animation-delay:1.82s}
+@keyframes gooseIn{
   0%{opacity:0;transform:translate(var(--dx),34px) scale(.55) rotate(var(--rot))}
   40%{opacity:1}
   58%{transform:translate(0,-4px) scale(1.07) rotate(0deg)}
   74%{transform:translate(0,-4px) scale(1.07) rotate(0deg)}
+  100%{opacity:1;transform:translate(0,0) scale(1) rotate(0deg)}
+}
+@keyframes hawkIn{
+  0%{opacity:0;transform:translate(var(--cx1),-92px) scale(.45) rotate(-4deg);
+     animation-timing-function:ease-out}
+  12%{opacity:.75}
+  38%{transform:translate(var(--cx2),-78px) scale(.58) rotate(-12deg);
+     animation-timing-function:ease-in-out}
+  58%{opacity:.9;transform:translate(10px,-88px) scale(.66) rotate(14deg);
+     animation-timing-function:cubic-bezier(.7,0,1,.6)}
+  76%{opacity:1;transform:translate(0,7px) scale(1.03) rotate(0deg);
+     animation-timing-function:ease-out}
+  84%{transform:translate(0,7px) scale(.92) rotate(0deg)}
+  91%{transform:translate(0,-3px) scale(1.05) rotate(0deg)}
   100%{opacity:1;transform:translate(0,0) scale(1) rotate(0deg)}
 }
 @media(prefers-reduced-motion:reduce){
@@ -240,7 +260,7 @@ footer .saekdong{margin:0 0 14px}
 <footer>
   <div class="wrap">
     <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v2.6 (2026-08-09)</p>
+    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v2.8 (2026-08-09)</p>
   </div>
 </footer>
 
