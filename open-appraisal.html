@@ -4,32 +4,73 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#1F4E79">
-<title>문화유산 감정 — 이동 중</title>
+<title>문화유산 감정 — 이동</title>
 <style>
 body{margin:0;background:#FAF7F0;color:#3D3831;
   font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
   display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px}
-.box{max-width:420px}
+.box{max-width:420px;width:100%}
 .saekdong{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
 .saekdong i{display:block;width:34px;height:5px}
 .saekdong i:nth-child(1){background:#1F4E79}.saekdong i:nth-child(2){background:#A63C32}
 .saekdong i:nth-child(3){background:#D9A43B}.saekdong i:nth-child(4){background:#221E1A}
 p{font-size:15px;line-height:1.7;margin:0 0 14px}
 a{color:#1F4E79;font-weight:700}
-.fine{color:#948B7D;font-size:12.5px}
+.btn{display:block;margin:0 0 10px;padding:14px 16px;border-radius:8px;
+  background:#1F4E79;color:#FAF7F0;text-decoration:none;font-size:16px;font-weight:700}
+.btn.sub{background:transparent;color:#1F4E79;border:1px solid #C9C0AE;font-weight:500;font-size:14.5px}
+.fine{color:#948B7D;font-size:12.5px;margin-top:16px}
+#msg{min-height:1.7em}
 </style>
-<script>
-/* 감정앱 게시 주소 — 재게시로 주소가 바뀌면 이 한 줄만 수정 */
-var APP_URL = "https://claude.ai/public/artifacts/c8c05dce-b003-40c5-a1ac-a3ef4a8452cb";
-location.replace(APP_URL);
-</script>
 </head>
 <body>
 <div class="box">
   <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-  <p>문화유산 감정 도구로 이동하고 있습니다.</p>
-  <p><a id="fallback" href="https://claude.ai/public/artifacts/d0b55682-6a25-4c05-a08f-a817ba67035e">자동으로 열리지 않으면 여기를 눌러 주십시오.</a></p>
-  <p class="fine">사진 등록이 되지 않을 때는 이 페이지 주소를 브라우저(Chrome·Safari)에서 열어 주십시오.</p>
+  <p id="msg">문화유산 감정 도구로 이동합니다.</p>
+  <a class="btn" id="open" href="#">감정 도구 열기</a>
+  <a class="btn sub" href="./">실무 도구 목록으로 돌아가기</a>
+  <p class="fine">아이폰·아이패드에서는 클로드 앱으로 열립니다. 앱을 닫고 이 화면으로 돌아오면 위 버튼으로 다시 들어갈 수 있습니다. 사진 등록이 되지 않을 때는 이 주소를 사파리나 크롬에서 열어 주십시오.</p>
 </div>
+
+<script>
+/* 감정앱 게시 주소 — 재게시로 주소가 바뀌면 이 한 줄만 수정한다 */
+var APP_URL = "https://claude.ai/public/artifacts/c8c05dce-b003-40c5-a1ac-a3ef4a8452cb";
+
+(function () {
+  var link = document.getElementById('open');
+  var msg = document.getElementById('msg');
+  link.href = APP_URL;
+
+  function manual(text) {
+    msg.textContent = text;
+  }
+
+  /* 이 탭에서 이미 한 번 넘긴 경우에는 자동 이동하지 않는다.
+     앱에서 돌아왔을 때 다시 앱으로 끌려가는 순환을 막는다. */
+  var KEY = 'hj-relay-handoff';
+  var already = false;
+  try { already = sessionStorage.getItem(KEY) === '1'; } catch (e) { already = false; }
+
+  if (already) {
+    manual('감정 도구를 다시 열려면 아래 버튼을 눌러 주십시오.');
+    return;
+  }
+
+  /* 화면이 그려진 뒤에 이동한다. 즉시 이동하면 빈 화면만 남는다.
+     location.href를 쓰므로 이 페이지가 방문 기록에 남아 되돌아올 수 있다. */
+  setTimeout(function () {
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+    location.href = APP_URL;
+    setTimeout(function () {
+      manual('자동으로 열리지 않으면 아래 버튼을 눌러 주십시오.');
+    }, 1500);
+  }, 700);
+
+  /* 뒤로가기나 앱 종료로 이 페이지가 되살아난 경우 안내만 표시한다 */
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) manual('감정 도구를 다시 열려면 아래 버튼을 눌러 주십시오.');
+  });
+})();
+</script>
 </body>
 </html>
