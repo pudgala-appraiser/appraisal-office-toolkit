@@ -21,6 +21,7 @@ a{color:#1F4E79;font-weight:700}
 .btn.sub{background:transparent;color:#1F4E79;border:1px solid #C9C0AE;font-weight:500;font-size:14.5px}
 .tip{margin-top:18px;padding:12px 14px;border:1px solid #E0D8C6;border-left:3px solid #D9A43B;border-radius:6px;background:#FDFBF6;color:#5C5346;font-size:13px;line-height:1.75;text-align:left}
 .tip b{color:#3D3831}
+.ver{color:#948B7D;font-size:12px;margin:-6px 0 14px}
 .fine{color:#948B7D;font-size:12.5px;margin-top:12px}
 #msg{min-height:1.7em}
 </style>
@@ -29,6 +30,7 @@ a{color:#1F4E79;font-weight:700}
 <div class="box">
   <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   <p id="msg">문화유산 감정 도구로 이동합니다.</p>
+  <p class="ver" id="ver"></p>
   <a class="btn" id="open" href="#">감정 도구 열기</a>
   <a class="btn sub" href="./">실무 도구 목록으로 돌아가기</a>
   <p class="tip">아이폰·아이패드에서는 클로드 앱의 작은 창으로 열립니다. 넓은 화면으로 쓰시려면 <b>「감정 도구 열기」를 길게 눌러 "새로운 탭에서 열기"</b>를 선택하십시오. 그렇게 연 뒤 사파리 공유 메뉴에서 <b>「홈 화면에 추가」</b>를 해 두면, 다음부터는 그 아이콘으로 바로 열립니다.</p>
@@ -36,11 +38,14 @@ a{color:#1F4E79;font-weight:700}
 </div>
 
 <script>
-/* 감정앱 게시 주소 — 재게시로 주소가 바뀌면 이 한 줄만 수정한다 */
+/* ── 릴리스 관리 지점: 재게시 시 아래 두 줄만 수정한다. 인트로(index.html)는 이 라벨을 자동으로 읽는다 ── */
 var APP_URL = "https://claude.ai/public/artifacts/7fecd99e-daaf-412e-a684-e715ee846a96";
+var APP_VERSION_LABEL = "감정지침 v2.7 앱판 r8 (2026-09-05)";
 
 (function () {
   var link = document.getElementById('open');
+  var verEl = document.getElementById('ver');
+  if (verEl) verEl.textContent = APP_VERSION_LABEL;
   var msg = document.getElementById('msg');
   link.href = APP_URL;
 

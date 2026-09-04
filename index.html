@@ -213,7 +213,7 @@ footer .saekdong{margin:0 0 14px}
       </div>
       <p>유물 사진과 증빙(영수증·라벨·서명 등)으로 일반동산문화유산 해당 여부를 판별하고,
       실물 감정·사전예약감정 등 처리 경로까지 권고하는 AI 화상 감정 보조 도구입니다.</p>
-      <div class="basis">문화유산법 제60조 · 시행령 제36조 [별표 3] · 감정지침 v2.6<br>휴대폰에서 사진 등록이 되지 않으면 링크를 브라우저(Chrome·Safari)로 열어 사용하십시오.</div>
+      <div class="basis">문화유산법 제60조 · 시행령 제36조 [별표 3] · <span id="app-ver">감정지침 현행판</span><br>휴대폰에서 사진 등록이 되지 않으면 링크를 브라우저(Chrome·Safari)로 열어 사용하십시오.</div>
       <a class="open" data-key="appraisal" href="#">열기</a>
     </article>
 
@@ -259,18 +259,29 @@ footer .saekdong{margin:0 0 14px}
 <footer>
   <div class="wrap">
     <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v3.3 (2026-08-13)</p>
+    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v3.4 (2026-09-05)</p>
   </div>
 </footer>
 
 <script>
-/* 감정앱은 앱 가로채기 우회를 위해 중계 페이지를 거친다 (게시 주소는 open-appraisal.html에서 관리) */
+/* 감정앱은 앱 가로채기 우회를 위해 중계 페이지를 거친다.
+   게시 주소와 버전 라벨은 open-appraisal.html에서만 관리하며, 아래에서 그 라벨을 읽어 카드에 표시한다. */
 var LINKS = {
   appraisal: "https://pudgala-appraiser.github.io/appraisal-office-toolkit/open-appraisal.html",
   screener:  "https://pudgala-appraiser.github.io/stolen-heritage-screener/",
   guide:     "https://pudgala-appraiser.github.io/heritage-guide/",
   procedure: "https://pudgala-appraiser.github.io/appraisal-procedure-guide/"
 };
+
+(function () {
+  /* 감정앱 버전 라벨 자동 표시 — 중계 페이지에서 읽는다. 실패하면 기본 문구 유지 */
+  var el = document.getElementById('app-ver');
+  if (!el || !window.fetch) return;
+  fetch(LINKS.appraisal, { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (txt) {
+    var m = txt.match(/APP_VERSION_LABEL\s*=\s*"([^"]+)"/);
+    if (m) el.textContent = m[1];
+  }).catch(function () {});
+})();
 
 (function () {
   'use strict';
