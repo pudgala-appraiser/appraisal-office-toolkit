@@ -47,46 +47,24 @@ body{margin:0;background:var(--bg);color:var(--body);
 /* 헤더 */
 header{background:var(--accent);color:var(--ondark);padding:26px 0 22px;position:relative;overflow:hidden}
 header .wrap{position:relative;z-index:1}
-/* 안진응안(雁陣鷹眼) 문양 — 쪽빛 위 회청 톤, 본문 뒤에 낮은 명도차로 배치 */
+/* 안진응안(雁陣鷹眼) 문양 — 쪽빛 위 회청 톤, 본문 뒤에 낮은 명도차로 배치
+   탁본 뜨기: 먹방망이로 두드린 자리마다 글자가 떠오르고, 거친 획과 빈 곳이 남는다 */
 header .mark{position:absolute;right:-10px;bottom:4px;
-  display:flex;gap:.04em;font-family:var(--serif);font-weight:400;line-height:1;
-  font-size:clamp(52px,13.5vw,98px);color:var(--ondarksub);opacity:.19;
-  pointer-events:none;user-select:none;z-index:0;white-space:nowrap}
-/* 그림 1·2자 雁陣 — 기러기: 낮게 활공해 들어와 떠올랐다 내려앉는다 */
-header .mark span{display:block;opacity:0;transform-origin:50% 80%;
-  transform:translate(var(--dx),34px) scale(.55) rotate(var(--rot));
-  animation:gooseIn 2.2s cubic-bezier(.25,.6,.3,1) forwards}
-header .mark span:nth-child(1){--dx:-24px;--rot:-8deg;animation-delay:.10s}
-header .mark span:nth-child(2){--dx:-15px;--rot:-4deg;animation-delay:.34s}
-/* 그림 3·4자 鷹眼 — 매: 두 자가 편대로 선회한 뒤 모이면서 함께 급강하한다 */
-header .mark span:nth-child(3),
-header .mark span:nth-child(4){
-  transform:translate(calc(var(--dir)*.26em + 46px),-96px) scale(.48) rotate(4deg);
-  animation:hawkIn 2.6s linear forwards;animation-delay:1.5s}
-header .mark span:nth-child(3){--dir:1}
-header .mark span:nth-child(4){--dir:-1}
-@keyframes gooseIn{
-  0%{opacity:0;transform:translate(var(--dx),34px) scale(.55) rotate(var(--rot))}
-  40%{opacity:1}
-  58%{transform:translate(0,-4px) scale(1.07) rotate(0deg)}
-  74%{transform:translate(0,-4px) scale(1.07) rotate(0deg)}
-  100%{opacity:1;transform:translate(0,0) scale(1) rotate(0deg)}
-}
-@keyframes hawkIn{
-  0%{opacity:0;transform:translate(calc(var(--dir)*.26em + 46px),-96px) scale(.48) rotate(4deg);
-     animation-timing-function:ease-out}
-  25%{opacity:.8;transform:translate(calc(var(--dir)*.23em - 26px),-82px) scale(.56) rotate(-10deg);
-     animation-timing-function:ease-in-out}
-  50%{opacity:.9;transform:translate(calc(var(--dir)*.20em + 6px),-90px) scale(.62) rotate(8deg);
-     animation-timing-function:cubic-bezier(.7,0,1,.6)}
-  75%{opacity:1;transform:translate(0,6px) scale(1.02) rotate(0deg);
-     animation-timing-function:ease-out}
-  84%{transform:translate(0,6px) scale(.94) rotate(0deg)}
-  92%{transform:translate(0,-2px) scale(1.04) rotate(0deg)}
-  100%{opacity:1;transform:translate(0,0) scale(1) rotate(0deg)}
-}
+  font-size:clamp(52px,13.5vw,98px);line-height:1;color:var(--ondarksub);opacity:.19;
+  pointer-events:none;user-select:none;z-index:0}
+header .mark svg{display:block;width:4.2em;height:1em;overflow:visible}
+header .mark text{font-family:var(--serif);font-weight:400;font-size:100px;fill:currentColor}
+/* 두드림 한 번 — 처음엔 옅게 묻었다가 다시 두드려 짙어진다 */
+header .mark .dab{opacity:0;animation:dab .55s ease-out forwards}
+@keyframes dab{0%{opacity:0}35%{opacity:.6}55%{opacity:.45}100%{opacity:1}}
+/* 마무리 고르기 — 두드림 사이의 큰 빈 곳을 메운다(질감의 빈 곳은 필터가 남김) */
+header .mark .settle{opacity:0;animation:settle .9s ease-in forwards}
+header .mark .settle.g{animation-delay:1.3s}
+header .mark .settle.h{animation-delay:2.55s;animation-duration:.5s}
+@keyframes settle{to{opacity:1}}
 @media(prefers-reduced-motion:reduce){
-  header .mark span{animation:none;transform:none;opacity:1}
+  header .mark .dab{display:none}
+  header .mark .settle{animation:none;opacity:1}
 }
 @media(max-width:640px){
   header .mark{opacity:.15}
@@ -177,7 +155,34 @@ footer .saekdong{margin:0 0 14px}
 <body>
 
 <header>
-  <div class="mark" aria-hidden="true"><span>雁</span><span>陣</span><span>鷹</span><span>眼</span></div>
+  <div class="mark" aria-hidden="true">
+    <svg viewBox="0 0 420 100" focusable="false">
+      <defs>
+        <!-- 탁본 질감: 획 가장자리를 거칠게 흔들고, 먹이 덜 묻은 빈 점을 남긴다 -->
+        <filter id="takbon" x="-4%" y="-8%" width="108%" height="116%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="warp"/>
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="4" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+          <feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="2" seed="3" result="speck"/>
+          <feColorMatrix in="speck" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -5 0 0 0 3.7" result="holes"/>
+          <!-- 먹 농담: 두드림이 짙게 묻은 곳과 옅게 묻은 곳 -->
+          <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="1" seed="11" result="blot"/>
+          <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.1 0 0 0 0.4" result="tone"/>
+          <feComposite in="rough" in2="holes" operator="in" result="pitted"/>
+          <feComposite in="pitted" in2="tone" operator="in"/>
+        </filter>
+        <filter id="dabsoft"><feGaussianBlur stdDeviation="3.2"/></filter>
+        <mask id="rubbing" maskUnits="userSpaceOnUse" x="-10" y="-10" width="440" height="120">
+          <g id="dabs" filter="url(#dabsoft)"></g>
+          <rect class="settle g" x="-10" y="-10" width="218" height="120" fill="#fff"/>
+          <rect class="settle h" x="208" y="-10" width="222" height="120" fill="#fff"/>
+        </mask>
+      </defs>
+      <g filter="url(#takbon)"><g mask="url(#rubbing)">
+        <text x="0" y="86">雁</text><text x="104" y="86">陣</text>
+        <text x="208" y="86">鷹</text><text x="312" y="86">眼</text>
+      </g></g>
+    </svg>
+  </div>
   <div class="wrap">
     <div class="eyebrow">KOREA HERITAGE SERVICE · 문화유산감정관실</div>
     <h1>감정관실 실무 도구</h1>
@@ -334,7 +339,36 @@ var LINKS = {
   });
 
   setActive(0);
-  startTimer();
+  /* 인장 순환은 헤더 탁본이 다 떠진 뒤에 시작 — 움직임이 겹치지 않게 */
+  setTimeout(startTimer, reduced ? 0 : 3200);
+
+  /* 탁본 두드림 — 雁陣은 넓고 고르게 천천히, 鷹眼은 한 박자 쉬고 잘고 빠르게 */
+  if (!reduced) {
+    var dabs = document.getElementById('dabs');
+    var NS = 'http://www.w3.org/2000/svg';
+    var groups = [
+      { x0: 0,   chars: 2, start: 0.15, span: 1.15, n: 30, rMin: 11, rMax: 17 },
+      { x0: 208, chars: 2, start: 1.95, span: 0.6,  n: 38, rMin: 7,  rMax: 12 }
+    ];
+    groups.forEach(function (g) {
+      for (var c = 0; c < g.chars; c++) {
+        var cx0 = g.x0 + c * 104;
+        for (var k = 0; k < g.n; k++) {
+          var t = k / g.n;
+          var dot = document.createElementNS(NS, 'circle');
+          dot.setAttribute('class', 'dab');
+          dot.setAttribute('cx', (cx0 + 6 + Math.random() * 90).toFixed(1));
+          /* 위에서 아래로 훑어 내려가되, 두드림 자리는 흩어진다 */
+          dot.setAttribute('cy', (4 + (t * 0.7 + Math.random() * 0.3) * 92).toFixed(1));
+          dot.setAttribute('r', (g.rMin + Math.random() * (g.rMax - g.rMin)).toFixed(1));
+          dot.setAttribute('fill', '#fff');
+          var d = g.start + c * g.span * 0.35 + t * g.span + Math.random() * 0.12;
+          dot.style.animationDelay = d.toFixed(2) + 's';
+          dabs.appendChild(dot);
+        }
+      }
+    });
+  }
 })();
 </script>
 </body>
