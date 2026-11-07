@@ -67,7 +67,7 @@ header .mark .settle.h{animation-delay:2.55s;animation-duration:.5s}
   header .mark .settle{animation:none;opacity:1}
 }
 @media(max-width:640px){
-  header .mark{opacity:.15}
+  header .mark{opacity:.24}
 }
 header .eyebrow{color:var(--ondarksub);font-size:clamp(9px,2.6vw,12px);font-weight:700;
   letter-spacing:clamp(0.5px,0.6vw,3px);margin-bottom:8px;white-space:nowrap}
@@ -114,13 +114,13 @@ header .sub{color:var(--ondarksub);font-size:14px;margin:0 0 14px}
   transition:background-color .45s ease}
 .card.on{background:var(--boxdeep)}
 .card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--ondark);
-  font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+/* 카드 인장 — 위 인장 행(審·査·鑑·規)과 같은 글자·색. 순서가 없는 도구라 번호 대신 인장으로 대응 */
+.num{flex:none;width:32px;height:32px;background:var(--accent);color:var(--ondark);
+  font-family:var(--serif);font-size:19px;font-weight:500;line-height:1;
+  display:flex;align-items:center;justify-content:center}
 .card h2{font-family:var(--serif);font-weight:800;
   font-size:18.5px;color:var(--ink);margin:0;line-height:1.35}
 .card.on h2{text-decoration:underline;text-underline-offset:4px}
-.card .ch-mini{margin-left:auto;font-family:var(--serif);font-weight:500;
-  font-size:20px;color:var(--faint)}
 .card p{margin:0 0 12px;font-size:14.5px;line-height:1.7}
 /* 카드 좌측 띠 — 인장·색동바와 대응 */
 #c1{border-left-color:var(--warn)}
@@ -145,6 +145,8 @@ a:focus-visible,.seal:focus-visible{outline:2px solid var(--accent);outline-offs
 .intro-note{border:1px solid var(--line);border-left:4px solid var(--accent);
   background:var(--box);padding:18px 20px;margin:0 0 30px;font-size:14.5px}
 .intro-note b{color:var(--ink)}
+.intro-note p{margin:0}
+.intro-note .final{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);color:var(--sub);font-size:13.5px}
 
 /* 푸터 */
 footer{padding:8px 0 36px}
@@ -202,19 +204,18 @@ footer .saekdong{margin:0 0 14px}
   <p class="seals-cap">인장을 누르면 해당 도구로 이동합니다</p>
 
   <div class="intro-note">
-    <b>비문화유산 확인 제도</b>를 중심으로 한 감정 현장의 실무를 하나의 흐름으로 묶었습니다.
+    <p><b>비문화유산 확인 제도</b>를 중심으로 한 감정 현장의 실무를 하나의 흐름으로 묶었습니다.
     접수된 동산을 <b>판별</b>하고 처리 경로를 정하며(審), 도난 국가유산 목록과 <b>대조</b>하고(査),
-    외국인 신청인에게 절차를 <b>안내</b>하며(鑑), 검색대 적발 시의 <b>조치 절차</b>를 따릅니다(規).
-    네 도구 모두 감정위원의 판단을 보조하며, 최종 판단은 감정위원이 합니다.
+    외국인 신청인에게 절차를 <b>안내</b>하며(鑑), 검색대 적발 시의 <b>조치 절차</b>를 따릅니다(規).</p>
+    <p class="final">네 도구 모두 감정위원의 판단을 보조하며, 최종 판단은 감정위원이 합니다.</p>
   </div>
 
   <div class="grid" id="cards">
 
     <article class="card" id="c0">
       <div class="card-head">
-        <span class="num" aria-hidden="true">1</span>
+        <span class="num" aria-hidden="true">審</span>
         <h2>문화유산 감정</h2>
-        <span class="ch-mini" aria-hidden="true">審</span>
       </div>
       <p>유물 사진과 증빙(영수증·라벨·서명 등)으로 일반동산문화유산 해당 여부를 판별하고,
       실물 감정·사전예약감정 등 처리 경로까지 권고하는 AI 화상 감정 보조 도구입니다.</p>
@@ -224,9 +225,8 @@ footer .saekdong{margin:0 0 14px}
 
     <article class="card" id="c1">
       <div class="card-head">
-        <span class="num" aria-hidden="true">2</span>
+        <span class="num" aria-hidden="true">査</span>
         <h2>도난국가유산 검색기</h2>
-        <span class="ch-mini" aria-hidden="true">査</span>
       </div>
       <p>취득·반출 물품을 국가유산청 공개 도난 목록 512건과 명칭·전문·이미지로 대조해
       검토 후보를 제시하는 1차 검색기입니다. 환지본처(還至本處) — 제자리로 돌아가기까지.</p>
@@ -236,9 +236,8 @@ footer .saekdong{margin:0 0 14px}
 
     <article class="card" id="c2">
       <div class="card-head">
-        <span class="num" aria-hidden="true">3</span>
+        <span class="num" aria-hidden="true">鑑</span>
         <h2>감정 현장 다국어 안내</h2>
-        <span class="ch-mini" aria-hidden="true">鑑</span>
       </div>
       <p>감정 절차와 확인 제도를 8개 언어 문안과 음성(TTS)으로 외국인 신청인에게
       현장에서 바로 안내합니다.</p>
@@ -248,9 +247,8 @@ footer .saekdong{margin:0 0 14px}
 
     <article class="card" id="c3">
       <div class="card-head">
-        <span class="num" aria-hidden="true">4</span>
+        <span class="num" aria-hidden="true">規</span>
         <h2>검색대 적발 시 절차</h2>
-        <span class="ch-mini" aria-hidden="true">規</span>
       </div>
       <p>검색 과정에서 미신청 동산이 발견되었을 때의 감정·조치 절차를
       단계별 문답으로 안내하는 현장 매뉴얼입니다.</p>
@@ -264,7 +262,7 @@ footer .saekdong{margin:0 0 14px}
 <footer>
   <div class="wrap">
     <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v3.5 (2026-11-07)</p>
+    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v3.6 (2026-11-07)</p>
   </div>
 </footer>
 
