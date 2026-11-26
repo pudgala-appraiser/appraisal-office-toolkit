@@ -2,371 +2,389 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1F4E79">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
 <title>감정관실 실무 도구</title>
-<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23ffffff'/><rect x='8' y='8' width='22' height='22' fill='%23000000'/><rect x='34' y='8' width='22' height='22' fill='%238a1c1c'/><rect x='8' y='34' width='22' height='22' fill='%238fcbf7'/><rect x='34' y='34' width='22' height='22' fill='%23f0c544'/></svg>">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="apple-mobile-web-app-title" content="실무 도구">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#FAF7F0; --ink:#221E1A; --body:#3D3831; --sub:#6F675B; --faint:#948B7D;
-  --line:#E3DBC9; --box:#F3EEE3; --boxdeep:#ECE5D6;
-  --accent:#1F4E79; --accent2:#1A4066; --warn:#A63C32; --flag:#D9A43B; --ok:#3F6B51;
-  --ondark:#FAF7F0; --ondarksub:#B9C9D8;
-  /* 본문·UI: 웹폰트 없이 각 기기 기본 한글 고딕 사용 */
-  --sans:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Segoe UI',Roboto,
-    'Malgun Gothic','맑은 고딕','Noto Sans KR','Nanum Gothic',sans-serif;
-  /* 제목·인장: 명조 유지. 한글은 나눔명조, 한자는 노토 명조로 글자 단위 대체 */
-  --serif:'Nanum Myeongjo','Noto Serif KR',AppleMyungjo,'Apple Myungjo',
-    'Source Han Serif K',Batang,'바탕',serif;
+/* =====================================================================
+   감정관실 실무 도구 — 인트로 화면 스타일 (v4.0, 「다섯 벌」 백 벌)
+   색·글자·면 처리는 다섯 벌 디자인 시스템(tokens.json)을 따른다.
+   네 도구(감정앱 r17 · 검색기 v4.2 · 다국어 안내 v5.0 · 적발 절차 v4.2)와 같은 문법이다.
+
+   규칙
+   1. 이 화면은 백 벌이다. 바탕은 흰색, 글자와 선은 먹. 화면 자체의 색면은 없다.
+   2. 색이 놓이는 곳은 네 인장뿐이다. 인장의 색은 각 도구의 아이콘·첫 화면과 같다.
+        審 감정 — 흑(먹)      査 대조 — 적의 짙은 변형(대추)
+        鑑 안내 — 청(하늘빛)   規 절차 — 황(치자)
+      도구의 벌이 바뀌면 여기 --deck-* 값과 아이콘(tools/make_icons.py)을 함께 고친다.
+   3. 모든 면은 직각. 그림자·그라데이션·둥근 모서리 없음.
+      색 띠 상자·색동은 쓰지 않는다. 굵은 먹 선 하나와 가는 선(seam)으로만 나눈다.
+   4. 제목은 본명조(화면 이름과 목록의 한자는 가는 300, 도구 이름·인장·맺는 문장은 500), 본문은 기기 고딕.
+      본명조는 이 화면에 나오는 글자만 추려 fonts/에 넣었다. 문안을 고치면 tools/make_fonts.py를 다시 돌린다.
+   5. 모션은 탁본(雁陣鷹眼)이 떠지는 한 번뿐이다. 축소 동작을 고른 기기에서는 처음부터 다 떠진 채로 놓인다.
+   글자 크기 단계: 12.5(부기) · 13(인장 이름) · 14(열기) · 15(본문) · 18(맺는 문장) · 19.5(도구 이름) · 화면 이름 34~60
+   ===================================================================== */
+
+@font-face { font-family: 'Dasot Serif'; font-weight: 300; font-style: normal; font-display: swap; src: url('fonts/dasot-serif-300.woff2') format('woff2'); }
+@font-face { font-family: 'Dasot Serif'; font-weight: 500; font-style: normal; font-display: swap; src: url('fonts/dasot-serif-500.woff2') format('woff2'); }
+
+:root {
+  /* ── 백 벌 — 값은 다섯 벌 tokens.json 그대로 ── */
+  --bg: #ffffff;     /* 바탕 */
+  --ink: #000000;    /* 제목, 굵은 선 */
+  --ink-2: #3a3a3a;  /* 본문 */
+  --mute: #6e6e6e;   /* 덧붙이는 말 */
+  --seam: #cfcfcf;   /* 가는 선 */
+
+  /* ── 네 인장 — 각 도구의 벌 ── */
+  --deck-sim: #000000;   --on-sim: #ece9e2;    /* 審 흑 */
+  --deck-sa: #8a1c1c;    --on-sa: #ffffff;     /* 査 대추 */
+  --deck-gam: #8fcbf7;   --on-gam: #0e2233;    /* 鑑 하늘빛 */
+  --deck-gyu: #f0c544;   --on-gyu: #17140a;    /* 規 치자 */
+
+  --serif: 'Dasot Serif', 'Noto Serif KR', 'Noto Serif CJK KR', 'AppleMyungjo', 'Batang', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', sans-serif;
+
+  --safe-t: env(safe-area-inset-top, 0px);  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px); --safe-r: env(safe-area-inset-right, 0px);
+  --gutter-l: max(20px, var(--safe-l), calc((100% - 1200px) / 2));
+  --gutter-r: max(20px, var(--safe-r), calc((100% - 1200px) / 2));
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--body);
-  font-family:var(--sans);
-  font-size:15.5px;line-height:1.65}
-.serif{font-family:var(--serif)}
-.wrap{max-width:880px;margin:0 auto;padding:0 18px}
 
-/* 색동 */
-.saekdong{display:flex;gap:8px}
-.saekdong i{display:block;width:34px;height:5px}
-.saekdong i:nth-child(1){background:var(--accent)}
-.saekdong i:nth-child(2){background:var(--warn)}
-.saekdong i:nth-child(3){background:var(--flag)}
-.saekdong i:nth-child(4){background:var(--ink)}
-.saekdong.ondark i:nth-child(1){background:var(--warn)}
-.saekdong.ondark i:nth-child(2){background:var(--flag)}
-.saekdong.ondark i:nth-child(3){background:var(--ondark)}
-.saekdong.ondark i:nth-child(4){background:var(--ink)}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg); color: var(--ink-2);
+  font-family: var(--sans); font-size: 15px; line-height: 1.65; word-break: keep-all;
+  min-height: 100vh;
+}
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-/* 헤더 */
-header{background:var(--accent);color:var(--ondark);padding:26px 0 22px;position:relative;overflow:hidden}
-header .wrap{position:relative;z-index:1}
-/* 안진응안(雁陣鷹眼) 문양 — 쪽빛 위 회청 톤, 본문 뒤에 낮은 명도차로 배치
-   탁본 뜨기: 먹방망이로 두드린 자리마다 글자가 떠오르고, 거친 획과 빈 곳이 남는다 */
-header .mark{position:absolute;right:-10px;bottom:4px;
-  font-size:clamp(52px,13.5vw,98px);line-height:1;color:var(--ondarksub);opacity:.19;
-  pointer-events:none;user-select:none;z-index:0}
-header .mark svg{display:block;width:4.2em;height:1em;overflow:visible}
-header .mark text{font-family:var(--serif);font-weight:400;font-size:100px;fill:currentColor}
+.page {
+  position: relative;
+  padding: calc(30px + var(--safe-t)) var(--gutter-r) calc(34px + var(--safe-b)) var(--gutter-l);
+}
+
+/* ── 머리 ── */
+.org { font-size: 13.5px; font-weight: 500; color: var(--ink-2); }
+.head h1 {
+  font-family: var(--serif); font-weight: 300; color: var(--ink);
+  font-size: clamp(34px, 8.4vw, 60px); line-height: 1.18; letter-spacing: -.02em;
+  word-break: keep-all; margin: 6px 0 8px;
+}
+.lede { font-size: 15px; color: var(--ink-2); }
+
+/* ── 탁본 — 雁陣鷹眼. 백 벌의 방식대로 틀 없이 흰 바탕에 놓는다 ──
+   먹방망이로 두드린 자리마다 글자가 떠오르고, 거친 획과 덜 묻은 점이 남는다.
+   좁은 화면에서는 화면 이름 아래 가로 한 줄, 넓은 화면에서는 오른쪽 가장자리에 세로로 선다.
+   먹은 순흑이 아니라 본문 먹(ink-2)이다 — 화면 이름과 審 인장의 검정보다 한 단 물러선다. */
+.takbon { color: var(--ink-2); width: min(100%, 380px); margin: 22px 0 26px; pointer-events: none; user-select: none; }
+.takbon svg { display: block; width: 100%; height: auto; overflow: visible; }
+.takbon text { font-family: var(--serif); font-weight: 500; font-size: 100px; fill: currentColor; }
 /* 두드림 한 번 — 처음엔 옅게 묻었다가 다시 두드려 짙어진다 */
-header .mark .dab{opacity:0;animation:dab .55s ease-out forwards}
-@keyframes dab{0%{opacity:0}35%{opacity:.6}55%{opacity:.45}100%{opacity:1}}
-/* 마무리 고르기 — 두드림 사이의 큰 빈 곳을 메운다(질감의 빈 곳은 필터가 남김) */
-header .mark .settle{opacity:0;animation:settle .9s ease-in forwards}
-header .mark .settle.g{animation-delay:1.3s}
-header .mark .settle.h{animation-delay:2.55s;animation-duration:.5s}
-@keyframes settle{to{opacity:1}}
-@media(prefers-reduced-motion:reduce){
-  header .mark .dab{display:none}
-  header .mark .settle{animation:none;opacity:1}
-}
-@media(max-width:640px){
-  header .mark{opacity:.24}
-}
-header .eyebrow{color:var(--ondarksub);font-size:clamp(9px,2.6vw,12px);font-weight:700;
-  letter-spacing:clamp(0.5px,0.6vw,3px);margin-bottom:8px;white-space:nowrap}
-header h1{font-family:var(--serif);font-weight:800;
-  font-size:clamp(25px,5vw,32px);margin:0 0 6px;line-height:1.3;color:var(--ondark);word-break:keep-all}
-header .sub{color:var(--ondarksub);font-size:14px;margin:0 0 14px}
+.takbon .dab { opacity: 0; animation: dab .55s ease-out forwards; }
+@keyframes dab { 0% { opacity: 0; } 35% { opacity: .6; } 55% { opacity: .45; } 100% { opacity: 1; } }
+/* 마무리 고르기 — 두드림 사이의 큰 빈 곳을 메운다(질감의 빈 곳은 필터가 남긴다) */
+.takbon .settle { opacity: 0; animation: settle .9s ease-in forwards; }
+.takbon .settle.g { animation-delay: 1.3s; }
+.takbon .settle.h { animation-delay: 2.55s; animation-duration: .5s; }
+@keyframes settle { to { opacity: 1; } }
 
-/* 인장 행 (동세) */
-.seals{display:grid;grid-template-columns:repeat(4,76px);gap:14px;justify-content:center;margin:34px 0 8px}
-.seal{padding:12px 0 10px;text-align:center;background:var(--box);
-  border:1px solid var(--line);cursor:pointer;
-  transition:background-color .45s ease,border-color .45s ease}
-@media(max-width:480px){
-  .seals{grid-template-columns:repeat(4,minmax(0,76px));gap:9px}
-  .seal .ch{font-size:28px}
-  .seal .nm{font-size:11px}
+/* ── 판 — 인장 넷과 도구 설명 넷이 한 격자에 놓인다 ──
+   좁은 화면: 인장 한 줄(바로 열기) 아래에 설명이 한 줄씩.
+   넓은 화면: 인장 아래에 그 도구의 설명이 단으로 선다. */
+.board {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(10px, 3.4vw, 22px);
+  border-top: 2px solid var(--ink); padding-top: 20px;
 }
-@media(max-width:320px){
-  .seals{grid-template-columns:repeat(2,minmax(0,120px));gap:10px}
+.seals, .tools { display: contents; }
+
+.seal { display: block; max-width: 104px; color: var(--ink); text-decoration: none; }
+.seal svg { display: block; width: 100%; height: auto; }
+.seal text { font-family: var(--serif); font-weight: 500; font-size: 38px; text-anchor: middle; }
+.seal--sim rect { fill: var(--deck-sim); }  .seal--sim text { fill: var(--on-sim); }
+.seal--sa rect  { fill: var(--deck-sa); }   .seal--sa text  { fill: var(--on-sa); }
+.seal--gam rect { fill: var(--deck-gam); }  .seal--gam text { fill: var(--on-gam); }
+.seal--gyu rect { fill: var(--deck-gyu); }  .seal--gyu text { fill: var(--on-gyu); }
+.seal-name { display: block; margin-top: 8px; font-size: 13px; font-weight: 500; line-height: 1.3; }
+.seal:hover svg, .seal.is-on svg { outline: 2px solid var(--ink); outline-offset: 3px; }
+.seal:hover .seal-name, .seal.is-on .seal-name { text-decoration: underline; text-underline-offset: 3px; }
+.seal:focus-visible { outline: none; }
+.seal:focus-visible svg { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.tool {
+  grid-column: 1 / -1; position: relative;
+  display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px;
+  padding: 18px 0 20px; border-top: 1px solid var(--seam);
 }
-.seal .ch{display:block;font-family:var(--serif);
-  font-weight:500;font-size:34px;line-height:1;color:var(--ink);
-  transition:color .45s ease}
-.seal .nm{display:block;font-size:11.5px;font-weight:700;color:var(--sub);margin-top:7px;letter-spacing:1px}
-.seal.on{background:var(--accent);border-color:var(--accent)}
-.seal.on .ch{color:var(--ondark)}
-.seal.on .nm{color:var(--ondarksub)}
-/* 인장별 강조색 — 하단 색동바 순서(청·적·황·먹)와 대응 */
-.seal:nth-child(2).on{background:var(--warn);border-color:var(--warn)}
-.seal:nth-child(2).on .nm{color:#E8CFCC}
-.seal:nth-child(3).on{background:var(--flag);border-color:var(--flag)}
-.seal:nth-child(3).on .ch{color:var(--ink)}
-.seal:nth-child(3).on .nm{color:#6B5320}
-.seal:nth-child(4).on{background:var(--ink);border-color:var(--ink)}
-.seal:nth-child(4).on .nm{color:#A9A296}
-.seal:hover{border-color:var(--accent)}
-.seals-cap{text-align:center;color:var(--faint);font-size:12.5px;margin:0 0 30px}
+.tool:first-child { margin-top: 26px; }
+.tool-ch { font-family: var(--serif); font-weight: 300; font-size: 34px; line-height: 1; color: var(--ink); padding-top: 1px; }
+.tool h2 { font-family: var(--serif); font-weight: 500; font-size: 19.5px; line-height: 1.35; color: var(--ink); word-break: keep-all; }
+.tool h2 a { color: inherit; text-decoration: none; }
+.tool h2 a::after { content: ""; position: absolute; inset: 0; }   /* 줄 전체가 눌린다 */
+.tool h2 a:focus-visible { outline: none; }
+.tool:has(h2 a:focus-visible) { outline: 2px solid var(--ink); outline-offset: 3px; }
+.tool p.desc { margin: 6px 0 8px; max-width: 34em; word-break: keep-all; }
+.tool .basis { font-size: 12.5px; line-height: 1.6; color: var(--mute); max-width: 40em; }
+.tool .go { display: inline-block; margin-top: 10px; font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.tool:hover h2 a, .tool.is-on h2 a { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 
-/* 카드 */
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:34px}
-@media(max-width:640px){.grid{grid-template-columns:1fr}}
-.card{background:var(--box);border:1px solid var(--line);border-left:4px solid var(--accent);
-  padding:22px 22px 20px;display:flex;flex-direction:column;
-  transition:background-color .45s ease}
-.card.on{background:var(--boxdeep)}
-.card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-/* 카드 인장 — 위 인장 행(審·査·鑑·規)과 같은 글자·색. 순서가 없는 도구라 번호 대신 인장으로 대응 */
-.num{flex:none;width:32px;height:32px;background:var(--accent);color:var(--ondark);
-  font-family:var(--serif);font-size:19px;font-weight:500;line-height:1;
-  display:flex;align-items:center;justify-content:center}
-.card h2{font-family:var(--serif);font-weight:800;
-  font-size:18.5px;color:var(--ink);margin:0;line-height:1.35}
-.card.on h2{text-decoration:underline;text-underline-offset:4px}
-.card p{margin:0 0 12px;font-size:14.5px;line-height:1.7}
-/* 카드 좌측 띠 — 인장·색동바와 대응 */
-#c1{border-left-color:var(--warn)}
-#c2{border-left-color:var(--flag)}
-#c3{border-left-color:var(--ink)}
-#c1 .num{background:var(--warn)}
-#c2 .num{background:var(--flag);color:var(--ink)}
-#c3 .num{background:var(--ink)}
-#c1 a.open{color:var(--warn);border-color:var(--warn)}
-#c1 a.open:hover{color:#8C322A;border-color:#8C322A}
-#c3 a.open{color:var(--ink);border-color:var(--ink)}
-#c3 a.open:hover{color:#000;border-color:#000}
-.card .basis{color:var(--faint);font-size:12px;margin:auto 0 14px;line-height:1.6}
-.card a.open{align-self:flex-start;display:inline-block;text-decoration:none;
-  background:transparent;color:var(--accent);border:1px solid var(--accent);
-  font-size:13.5px;font-weight:700;letter-spacing:1px;padding:9px 20px}
-.card a.open:hover{color:var(--accent2);border-color:var(--accent2);text-decoration:underline}
-.card a.open.pending{color:var(--faint);border-color:var(--line);pointer-events:none}
-a:focus-visible,.seal:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+/* ── 소개 ── */
+.note { margin-top: 12px; border-top: 1px solid var(--seam); padding-top: 22px; max-width: 43em; }
+.note p { line-height: 1.75; }
+.note b { font-weight: 500; color: var(--ink); }
+.note .final { font-family: var(--serif); font-weight: 500; font-size: 18px; line-height: 1.55; color: var(--ink); margin-top: 14px; word-break: keep-all; }
 
-/* 소개문 */
-.intro-note{border:1px solid var(--line);border-left:4px solid var(--accent);
-  background:var(--box);padding:18px 20px;margin:0 0 30px;font-size:14.5px}
-.intro-note b{color:var(--ink)}
-.intro-note p{margin:0}
-.intro-note .final{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);color:var(--sub);font-size:13.5px}
+/* ── 꼬리 ── */
+.foot {
+  margin-top: 40px; border-top: 1px solid var(--seam); padding-top: 12px;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 20px;
+  font-size: 12.5px; color: var(--mute);
+}
 
-/* 푸터 */
-footer{padding:8px 0 36px}
-footer .fine{color:var(--faint);font-size:12px;line-height:1.7;margin:0 0 6px}
-footer .saekdong{margin:0 0 14px}
+/* ── 넓은 화면 ── */
+@media (min-width: 960px) {
+  .page { padding-top: calc(56px + var(--safe-t)); padding-bottom: calc(48px + var(--safe-b)); }
+  .js .page { padding-right: calc(var(--gutter-r) + 176px); }
+  .js .takbon { position: absolute; top: calc(56px + var(--safe-t)); right: var(--gutter-r); width: 116px; margin: 0; }
+  .head { padding-bottom: 44px; }
+  .js .head { min-height: 150px; }
+  .board { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 36px; padding-top: 28px; }
+  .seal { max-width: 112px; }
+  .seal-name { display: none; }
+  .tool { grid-column: auto; display: flex; flex-direction: column; border-top: none; padding: 18px 0 0; }
+  .tool:first-child { margin-top: 0; }
+  .tool-ch { display: none; }
+  .tool .basis { margin-top: auto; }
+  .tool-body { display: flex; flex-direction: column; flex: 1; }
+  .note { margin-top: 44px; padding-top: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .takbon .dab { display: none; }
+  .takbon .settle { animation: none; opacity: 1; }
+}
+@media print {
+  .takbon .dab { display: none; }
+  .takbon .settle { animation: none; opacity: 1; }
+}
 </style>
 </head>
 <body>
+<div class="page">
 
-<header>
-  <div class="mark" aria-hidden="true">
+  <header class="head">
+    <p class="org">국가유산청 문화유산감정관실</p>
+    <h1 data-thin>감정관실 실무 도구</h1>
+    <p class="lede">감정 현장의 네 가지 도구</p>
+  </header>
+
+  <!-- 탁본: 스크립트가 화면 폭에 맞춰 가로·세로로 다시 그린다. 스크립트가 없으면 아래 가로 한 줄이 그대로 보인다 -->
+  <div class="takbon" id="takbon" aria-hidden="true">
     <svg viewBox="0 0 420 100" focusable="false">
-      <defs>
-        <!-- 탁본 질감: 획 가장자리를 거칠게 흔들고, 먹이 덜 묻은 빈 점을 남긴다 -->
-        <filter id="takbon" x="-4%" y="-8%" width="108%" height="116%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="warp"/>
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="4" xChannelSelector="R" yChannelSelector="G" result="rough"/>
-          <feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="2" seed="3" result="speck"/>
-          <feColorMatrix in="speck" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -5 0 0 0 3.7" result="holes"/>
-          <!-- 먹 농담: 두드림이 짙게 묻은 곳과 옅게 묻은 곳 -->
-          <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="1" seed="11" result="blot"/>
-          <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.1 0 0 0 0.4" result="tone"/>
-          <feComposite in="rough" in2="holes" operator="in" result="pitted"/>
-          <feComposite in="pitted" in2="tone" operator="in"/>
-        </filter>
-        <filter id="dabsoft"><feGaussianBlur stdDeviation="3.2"/></filter>
-        <mask id="rubbing" maskUnits="userSpaceOnUse" x="-10" y="-10" width="440" height="120">
-          <g id="dabs" filter="url(#dabsoft)"></g>
-          <rect class="settle g" x="-10" y="-10" width="218" height="120" fill="#fff"/>
-          <rect class="settle h" x="208" y="-10" width="222" height="120" fill="#fff"/>
-        </mask>
-      </defs>
-      <g filter="url(#takbon)"><g mask="url(#rubbing)">
-        <text x="0" y="86">雁</text><text x="104" y="86">陣</text>
-        <text x="208" y="86">鷹</text><text x="312" y="86">眼</text>
-      </g></g>
+      <text x="0" y="86">雁</text><text x="104" y="86">陣</text><text x="208" y="86">鷹</text><text x="312" y="86">眼</text>
     </svg>
   </div>
-  <div class="wrap">
-    <div class="eyebrow">KOREA HERITAGE SERVICE · 문화유산감정관실</div>
-    <h1>감정관실 실무 도구</h1>
-    <p class="sub">감정 현장의 네 가지 도구 — 판별 · 대조 · 안내 · 절차</p>
-    <div class="saekdong ondark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-  </div>
-</header>
 
-<main class="wrap">
+  <main>
+    <div class="board" id="board">
 
-  <div class="seals" id="seals" aria-label="도구 바로가기">
-    <button class="seal" data-i="0"><span class="ch">審</span><span class="nm">감정</span></button>
-    <button class="seal" data-i="1"><span class="ch">査</span><span class="nm">대조</span></button>
-    <button class="seal" data-i="2"><span class="ch">鑑</span><span class="nm">안내</span></button>
-    <button class="seal" data-i="3"><span class="ch">規</span><span class="nm">절차</span></button>
-  </div>
-  <p class="seals-cap">인장을 누르면 해당 도구로 이동합니다</p>
+      <nav class="seals" aria-label="도구 바로 열기">
+        <a class="seal seal--sim" data-k="0" target="_blank" rel="noopener" aria-label="문화유산 감정 열기"
+           href="https://pudgala-appraiser.github.io/appraisal-office-toolkit/open-appraisal.html">
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64"/><text x="32" y="46">審</text></svg>
+          <span class="seal-name" aria-hidden="true">감정</span>
+        </a>
+        <a class="seal seal--sa" data-k="1" target="_blank" rel="noopener" aria-label="도난국가유산 검색기 열기"
+           href="https://pudgala-appraiser.github.io/stolen-heritage-screener/">
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64"/><text x="32" y="46">査</text></svg>
+          <span class="seal-name" aria-hidden="true">대조</span>
+        </a>
+        <a class="seal seal--gam" data-k="2" target="_blank" rel="noopener" aria-label="감정 현장 다국어 안내 열기"
+           href="https://pudgala-appraiser.github.io/heritage-guide/">
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64"/><text x="32" y="46">鑑</text></svg>
+          <span class="seal-name" aria-hidden="true">안내</span>
+        </a>
+        <a class="seal seal--gyu" data-k="3" target="_blank" rel="noopener" aria-label="검색대 적발 시 절차 열기"
+           href="https://pudgala-appraiser.github.io/appraisal-procedure-guide/">
+          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64"/><text x="32" y="46">規</text></svg>
+          <span class="seal-name" aria-hidden="true">절차</span>
+        </a>
+      </nav>
 
-  <div class="intro-note">
-    <p><b>비문화유산 확인 제도</b>를 중심으로 한 감정 현장의 실무를 하나의 흐름으로 묶었습니다.
-    접수된 동산을 <b>판별</b>하고 처리 경로를 정하며(審), 도난 국가유산 목록과 <b>대조</b>하고(査),
-    외국인 신청인에게 절차를 <b>안내</b>하며(鑑), 검색대 적발 시의 <b>조치 절차</b>를 따릅니다(規).</p>
-    <p class="final">네 도구 모두 감정위원의 판단을 보조하며, 최종 판단은 감정위원이 합니다.</p>
-  </div>
+      <div class="tools">
 
-  <div class="grid" id="cards">
+        <article class="tool" data-k="0">
+          <span class="tool-ch" data-thin aria-hidden="true">審</span>
+          <div class="tool-body">
+            <h2><a target="_blank" rel="noopener" href="https://pudgala-appraiser.github.io/appraisal-office-toolkit/open-appraisal.html">문화유산 감정</a></h2>
+            <p class="desc">유물 사진과 증빙(영수증·라벨·서명 등)으로 일반동산문화유산 해당 여부를 판별하고,
+            실물 감정·사전예약감정 등 처리 경로까지 권고하는 AI 화상 감정 보조 도구입니다.</p>
+            <p class="basis">문화유산법 제60조 · 시행령 제36조 [별표 3] · <span id="app-ver">감정지침 현행판</span><br>휴대폰에서 사진 등록이 되지 않으면 링크를 브라우저(Chrome·Safari)로 열어 사용하십시오.</p>
+            <span class="go" aria-hidden="true">열기</span>
+          </div>
+        </article>
 
-    <article class="card" id="c0">
-      <div class="card-head">
-        <span class="num" aria-hidden="true">審</span>
-        <h2>문화유산 감정</h2>
+        <article class="tool" data-k="1">
+          <span class="tool-ch" data-thin aria-hidden="true">査</span>
+          <div class="tool-body">
+            <h2><a target="_blank" rel="noopener" href="https://pudgala-appraiser.github.io/stolen-heritage-screener/">도난국가유산 검색기</a></h2>
+            <p class="desc">취득·반출 물품을 국가유산청 공개 도난 목록 513건(회수완료 1건 포함)과 명칭·전문·이미지로 대조해
+            검토 후보를 제시하는 1차 검색기입니다. 환지본처(還至本處) — 제자리로 돌아가기까지.</p>
+            <p class="basis">국가유산청 『도난국가유산 정보』(2025) + 누리집 갱신분</p>
+            <span class="go" aria-hidden="true">열기</span>
+          </div>
+        </article>
+
+        <article class="tool" data-k="2">
+          <span class="tool-ch" data-thin aria-hidden="true">鑑</span>
+          <div class="tool-body">
+            <h2><a target="_blank" rel="noopener" href="https://pudgala-appraiser.github.io/heritage-guide/">감정 현장 다국어 안내</a></h2>
+            <p class="desc">감정 절차와 확인 제도를 8개 언어 문안과 음성(TTS)으로 외국인 신청인에게
+            현장에서 바로 안내합니다.</p>
+            <p class="basis">문화유산법 제60조·제90조 · 형사소송법 관련 조항</p>
+            <span class="go" aria-hidden="true">열기</span>
+          </div>
+        </article>
+
+        <article class="tool" data-k="3">
+          <span class="tool-ch" data-thin aria-hidden="true">規</span>
+          <div class="tool-body">
+            <h2><a target="_blank" rel="noopener" href="https://pudgala-appraiser.github.io/appraisal-procedure-guide/">검색대 적발 시 절차</a></h2>
+            <p class="desc">검색 과정에서 미신청 동산이 발견되었을 때의 감정·조치 절차를
+            단계별 문답으로 안내하는 현장 매뉴얼입니다.</p>
+            <p class="basis">문화유산법 제39·60·90조 · 형사소송법 제211·212조 · 감정관실 설치·운영 규정</p>
+            <span class="go" aria-hidden="true">열기</span>
+          </div>
+        </article>
+
       </div>
-      <p>유물 사진과 증빙(영수증·라벨·서명 등)으로 일반동산문화유산 해당 여부를 판별하고,
-      실물 감정·사전예약감정 등 처리 경로까지 권고하는 AI 화상 감정 보조 도구입니다.</p>
-      <div class="basis">문화유산법 제60조 · 시행령 제36조 [별표 3] · <span id="app-ver">감정지침 현행판</span><br>휴대폰에서 사진 등록이 되지 않으면 링크를 브라우저(Chrome·Safari)로 열어 사용하십시오.</div>
-      <a class="open" data-key="appraisal" href="#">열기</a>
-    </article>
+    </div>
 
-    <article class="card" id="c1">
-      <div class="card-head">
-        <span class="num" aria-hidden="true">査</span>
-        <h2>도난국가유산 검색기</h2>
-      </div>
-      <p>취득·반출 물품을 국가유산청 공개 도난 목록 513건(회수완료 1건 포함)과 명칭·전문·이미지로 대조해
-      검토 후보를 제시하는 1차 검색기입니다. 환지본처(還至本處) — 제자리로 돌아가기까지.</p>
-      <div class="basis">국가유산청 『도난국가유산 정보』(2025) + 누리집 갱신분</div>
-      <a class="open" data-key="screener" href="#">열기</a>
-    </article>
+    <section class="note">
+      <p><b>비문화유산 확인 제도</b>를 중심으로 한 감정 현장의 실무를 하나의 흐름으로 묶었습니다.
+      접수된 동산을 <b>판별</b>하고 처리 경로를 정하며(審), 도난 국가유산 목록과 <b>대조</b>하고(査),
+      외국인 신청인에게 절차를 <b>안내</b>하며(鑑), 검색대 적발 시의 <b>조치 절차</b>를 따릅니다(規).</p>
+      <p class="final">네 도구 모두 감정위원의 판단을 보조하며, 최종 판단은 감정위원이 합니다.</p>
+    </section>
+  </main>
 
-    <article class="card" id="c2">
-      <div class="card-head">
-        <span class="num" aria-hidden="true">鑑</span>
-        <h2>감정 현장 다국어 안내</h2>
-      </div>
-      <p>감정 절차와 확인 제도를 8개 언어 문안과 음성(TTS)으로 외국인 신청인에게
-      현장에서 바로 안내합니다.</p>
-      <div class="basis">문화유산법 제60조·제90조 · 형사소송법 관련 조항</div>
-      <a class="open" data-key="guide" href="#">열기</a>
-    </article>
+  <footer class="foot">
+    <span>국가유산청 문화유산감정관실 실무 도구 모음</span>
+    <span>인트로 v4.0 (2026-11-26)</span>
+  </footer>
 
-    <article class="card" id="c3">
-      <div class="card-head">
-        <span class="num" aria-hidden="true">規</span>
-        <h2>검색대 적발 시 절차</h2>
-      </div>
-      <p>검색 과정에서 미신청 동산이 발견되었을 때의 감정·조치 절차를
-      단계별 문답으로 안내하는 현장 매뉴얼입니다.</p>
-      <div class="basis">문화유산법 제39·60·90조 · 형사소송법 제211·212조 · 감정관실 설치·운영 규정</div>
-      <a class="open" data-key="procedure" href="#">열기</a>
-    </article>
-
-  </div>
-</main>
-
-<footer>
-  <div class="wrap">
-    <div class="saekdong" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <p class="fine">국가유산청 문화유산감정관실 실무도구 모음 · 본 도구들은 감정위원의 판단을 보조하며 최종 판단은 감정위원이 합니다. · 인트로 v3.7 (2026-11-07)</p>
-  </div>
-</footer>
+</div>
 
 <script>
-/* 감정앱은 앱 가로채기 우회를 위해 중계 페이지를 거친다.
-   게시 주소와 버전 라벨은 open-appraisal.html에서만 관리하며, 아래에서 그 라벨을 읽어 카드에 표시한다. */
-var LINKS = {
-  appraisal: "https://pudgala-appraiser.github.io/appraisal-office-toolkit/open-appraisal.html",
-  screener:  "https://pudgala-appraiser.github.io/stolen-heritage-screener/",
-  guide:     "https://pudgala-appraiser.github.io/heritage-guide/",
-  procedure: "https://pudgala-appraiser.github.io/appraisal-procedure-guide/"
-};
+document.documentElement.classList.add('js');
 
+/* 감정앱은 앱 가로채기 우회를 위해 중계 페이지(open-appraisal.html)를 거친다.
+   게시 주소와 판 라벨은 중계 페이지에서만 관리하며, 아래에서 그 라벨을 읽어 감정 설명에 표시한다. 실패하면 기본 문구 유지 */
 (function () {
-  /* 감정앱 버전 라벨 자동 표시 — 중계 페이지에서 읽는다. 실패하면 기본 문구 유지 */
   var el = document.getElementById('app-ver');
   if (!el || !window.fetch) return;
-  fetch(LINKS.appraisal, { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (txt) {
+  fetch('open-appraisal.html', { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (txt) {
     var m = txt.match(/APP_VERSION_LABEL\s*=\s*"([^"]+)"/);
-    if (m) el.textContent = m[1];
+    if (m) el.textContent = m[1].replace(/^\s+/, '');
   }).catch(function () {});
 })();
 
+/* 인장과 설명 잇기 — 하나를 가리키면 짝도 함께 표시된다 */
 (function () {
-  'use strict';
-
-  /* 링크 주입 */
-  var anchors = document.querySelectorAll('a.open');
-  Array.prototype.forEach.call(anchors, function (a) {
-    var url = LINKS[a.getAttribute('data-key')] || '';
-    if (/^https?:\/\//.test(url)) {
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener';
-    } else {
-      a.textContent = '링크 등록 예정';
-      a.classList.add('pending');
-      a.removeAttribute('href');
-    }
-  });
-
-  /* 순환 강조 (절제된 동세) — 축소 동작 선호 시 자동 순환 없음 */
   var seals = document.querySelectorAll('.seal');
-  var cards = document.querySelectorAll('.card');
-  var idx = 0, timer = null;
+  var tools = document.querySelectorAll('.tool');
+  function mark(k, on) {
+    if (seals[k]) seals[k].classList.toggle('is-on', on);
+    if (tools[k]) tools[k].classList.toggle('is-on', on);
+  }
+  function bind(list) {
+    Array.prototype.forEach.call(list, function (el) {
+      var k = +el.getAttribute('data-k');
+      el.addEventListener('mouseenter', function () { mark(k, true); });
+      el.addEventListener('mouseleave', function () { mark(k, false); });
+      el.addEventListener('focusin', function () { mark(k, true); });
+      el.addEventListener('focusout', function () { mark(k, false); });
+    });
+  }
+  bind(seals); bind(tools);
+})();
+
+/* 탁본 — 雁陣은 넓고 고르게 천천히, 鷹眼은 한 박자 쉬고 잘고 빠르게 두드린다.
+   넓은 화면(960px~)에서는 세로, 그보다 좁으면 가로. 두드림은 처음 한 번만 보이고, 폭이 바뀌면 다 떠진 채로 다시 놓는다. */
+(function () {
+  var host = document.getElementById('takbon');
+  if (!host || !window.matchMedia) return;
+  var CH = ['雁', '陣', '鷹', '眼'];
+  var STEP = 104;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wide = window.matchMedia('(min-width: 960px)');
+  var groups = [
+    { first: 0, start: 0.15, span: 1.15, n: 30, rMin: 11, rMax: 17 },
+    { first: 2, start: 1.95, span: 0.6,  n: 38, rMin: 7,  rMax: 12 }
+  ];
 
-  function setActive(i) {
-    Array.prototype.forEach.call(seals, function (s, k) { s.classList.toggle('on', k === i); });
-    Array.prototype.forEach.call(cards, function (c, k) { c.classList.toggle('on', k === i); });
-    idx = i;
-  }
-  function cycle() { setActive((idx + 1) % 4); }
-  function startTimer() {
-    if (reduced || timer) return;
-    timer = setInterval(cycle, 3500);
-  }
-  function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
-
-  Array.prototype.forEach.call(seals, function (s, k) {
-    s.addEventListener('click', function () {
-      stopTimer();
-      setActive(k);
-      cards[k].scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
-    });
-    s.addEventListener('mouseenter', function () { stopTimer(); setActive(k); });
-    s.addEventListener('mouseleave', startTimer);
-  });
-  Array.prototype.forEach.call(cards, function (c, k) {
-    c.addEventListener('mouseenter', function () { stopTimer(); setActive(k); });
-    c.addEventListener('mouseleave', startTimer);
-  });
-
-  setActive(0);
-  /* 인장 순환은 헤더 탁본이 다 떠진 뒤에 시작 — 움직임이 겹치지 않게 */
-  setTimeout(startTimer, reduced ? 0 : 3200);
-
-  /* 탁본 두드림 — 雁陣은 넓고 고르게 천천히, 鷹眼은 한 박자 쉬고 잘고 빠르게 */
-  if (!reduced) {
-    var dabs = document.getElementById('dabs');
-    var NS = 'http://www.w3.org/2000/svg';
-    var groups = [
-      { x0: 0,   chars: 2, start: 0.15, span: 1.15, n: 30, rMin: 11, rMax: 17 },
-      { x0: 208, chars: 2, start: 1.95, span: 0.6,  n: 38, rMin: 7,  rMax: 12 }
-    ];
-    groups.forEach(function (g) {
-      for (var c = 0; c < g.chars; c++) {
-        var cx0 = g.x0 + c * 104;
-        for (var k = 0; k < g.n; k++) {
-          var t = k / g.n;
-          var dot = document.createElementNS(NS, 'circle');
-          dot.setAttribute('class', 'dab');
-          dot.setAttribute('cx', (cx0 + 6 + Math.random() * 90).toFixed(1));
-          /* 위에서 아래로 훑어 내려가되, 두드림 자리는 흩어진다 */
-          dot.setAttribute('cy', (4 + (t * 0.7 + Math.random() * 0.3) * 92).toFixed(1));
-          dot.setAttribute('r', (g.rMin + Math.random() * (g.rMax - g.rMin)).toFixed(1));
-          dot.setAttribute('fill', '#fff');
-          var d = g.start + c * g.span * 0.35 + t * g.span + Math.random() * 0.12;
-          dot.style.animationDelay = d.toFixed(2) + 's';
-          dabs.appendChild(dot);
+  function draw(animate) {
+    var v = wide.matches;
+    var W = v ? 100 : 420, H = v ? 420 : 100;
+    var texts = CH.map(function (c, i) {
+      return '<text x="' + (v ? 0 : i * STEP) + '" y="' + (86 + (v ? i * STEP : 0)) + '">' + c + '</text>';
+    }).join('');
+    /* 탁본 질감: 획 가장자리를 거칠게 흔들고, 먹이 덜 묻은 빈 점과 농담을 남긴다 */
+    var defs =
+      '<filter id="takbon-f" x="-6%" y="-6%" width="112%" height="112%">' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="warp"/>' +
+        '<feDisplacementMap in="SourceGraphic" in2="warp" scale="4" xChannelSelector="R" yChannelSelector="G" result="rough"/>' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="2" seed="3" result="speck"/>' +
+        '<feColorMatrix in="speck" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -5 0 0 0 3.7" result="holes"/>' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="1" seed="11" result="blot"/>' +
+        '<feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.1 0 0 0 0.4" result="tone"/>' +
+        '<feComposite in="rough" in2="holes" operator="in" result="pitted"/>' +
+        '<feComposite in="pitted" in2="tone" operator="in"/>' +
+      '</filter>';
+    var body = texts;
+    if (animate) {
+      var dabs = '';
+      groups.forEach(function (g) {
+        for (var c = 0; c < 2; c++) {
+          var a0 = (g.first + c) * STEP;
+          for (var k = 0; k < g.n; k++) {
+            var t = k / g.n;
+            /* 글자마다 위에서 아래로 훑어 내려가되, 두드림 자리는 흩어진다 */
+            var x = (v ? 0 : a0) + 6 + Math.random() * 90;
+            var y = (v ? a0 : 0) + 4 + (t * 0.7 + Math.random() * 0.3) * 92;
+            var r = g.rMin + Math.random() * (g.rMax - g.rMin);
+            var d = g.start + c * g.span * 0.35 + t * g.span + Math.random() * 0.12;
+            dabs += '<circle class="dab" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r.toFixed(1) +
+                    '" fill="#fff" style="animation-delay:' + d.toFixed(2) + 's"/>';
+          }
         }
-      }
-    });
+      });
+      var half = 2 * STEP;
+      var rects = v
+        ? '<rect class="settle g" x="-10" y="-10" width="120" height="' + (half + 10) + '" fill="#fff"/>' +
+          '<rect class="settle h" x="-10" y="' + half + '" width="120" height="' + (half + 14) + '" fill="#fff"/>'
+        : '<rect class="settle g" x="-10" y="-10" width="' + (half + 10) + '" height="120" fill="#fff"/>' +
+          '<rect class="settle h" x="' + half + '" y="-10" width="' + (half + 14) + '" height="120" fill="#fff"/>';
+      defs += '<filter id="takbon-soft"><feGaussianBlur stdDeviation="3.2"/></filter>' +
+        '<mask id="takbon-m" maskUnits="userSpaceOnUse" x="-10" y="-10" width="' + (W + 20) + '" height="' + (H + 20) + '">' +
+          '<g filter="url(#takbon-soft)">' + dabs + '</g>' + rects +
+        '</mask>';
+      body = '<g mask="url(#takbon-m)">' + texts + '</g>';
+    }
+    host.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" focusable="false"><defs>' + defs + '</defs>' +
+      '<g filter="url(#takbon-f)">' + body + '</g></svg>';
   }
+
+  draw(!reduced);
+  var onChange = function () { draw(false); };
+  if (wide.addEventListener) wide.addEventListener('change', onChange);
+  else if (wide.addListener) wide.addListener(onChange);
 })();
 </script>
 </body>
